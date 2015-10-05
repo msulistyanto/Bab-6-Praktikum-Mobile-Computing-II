@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import android.R.layout;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,25 +26,70 @@ public class JSONActivity extends Activity {
 
 	private JSONObject jObject;
 
-	private String xResult ="";
+//	private String xResult ="";
 	//Sesuaikan url dengan nama domain yang anda gunakan
 	private String url = "http://192.168.43.195/menu/daftarmakanan.php";
+	TextView txtResult;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.daftarmakanan);
-		TextView txtResult = (TextView)findViewById(R.id.TextViewResult);
-        xResult = getRequest(url);
-       	try {
- 			parse(txtResult);
- 		} catch (Exception e) {
- 			e.printStackTrace();
- 		}
+		txtResult = (TextView)findViewById(R.id.TextViewResult);
+//        xResult = getRequest(url);
+		(new DoTask1()).execute(url);
+//		(new DoTask2()).execute(txtResult);
+		
+//		try {
+//			parse(params[0]);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
-	private void parse(TextView txtResult) throws Exception {
-		jObject = new JSONObject(xResult);
+	
+	private class DoTask1 extends AsyncTask<String, Void, String> {		
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			String hasil= getRequest(params[0]);
+//			xResult =hasil;
+			//return hasil;
+			return hasil;
+		}
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+//			super.onPostExecute(result);
+			try {
+				parse(result);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
+//	private class DoTask2 extends AsyncTask<TextView, Void, Void> {
+//
+//		@Override
+//		protected Void doInBackground(TextView... params) {
+//			// TODO Auto-generated method stub
+//			try {
+//				parse(params[0]);
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			return null;
+//		}		
+//
+//	}
+	
+	
+	private void parse(String hasil) throws Exception {
+		jObject = new JSONObject(hasil);
 
 		JSONArray menuitemArray = jObject.getJSONArray("makanan");
 		String sret="";

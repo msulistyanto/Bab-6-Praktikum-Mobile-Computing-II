@@ -5,9 +5,10 @@
 
     <uses-sdk
         android:minSdkVersion="10"
-        android:targetSdkVersion="10" />
-    <uses-permission android:name="android.permission.INTERNET"/>"
-    
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -18,8 +19,13 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".InsertActivity" android:label="Tambah Data" >
+        </activity>
+        <activity android:name="JSONActivity" android:label="Tampil Data">
         </activity>
     </application>
 

@@ -4,58 +4,71 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //import Activity;
 
 public class MainActivity extends ListActivity {
-    /** Called when the activity is first created. */
+	/** Called when the activity is first created. */
+	String[] menu = new String[] { "Tambah Data", "Tampilkan Data", "Exit" };
+	ListView listView;
+
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
 		// Create an array of Strings, that will be put to our ListActivity
-		String[] menu = new String[] { "Tambah Data", "Tampilkan Data", "Exit" };
+
 		// Create an ArrayAdapter, that will actually make the Strings above
 		// appear in the ListView
 		// Menset nilai array ke dalam list adapter sehingga data pada array
 		// akan dimunculkan dalam list
-		this.setListAdapter(new ArrayAdapter<String>(this,
+
+		listView = getListView();
+		listView.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, menu));
-	}
+		listView.setOnItemClickListener(new OnItemClickListener() {
 
-	@Override
-	/**method ini akan mengoveride method onListItemClick
-	 * yang ada pada class List Activity
-	 * method ini akan dipanggil apabila ada salah satu item
-	 * dari list menu yang dipilih
-	 */
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		// Get the item that was clicked
-		Object o = this.getListAdapter().getItem(position);
-		String pilihan = o.toString();
-		tampilkanPilihan(pilihan);
-	}
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				String pilihan = ((TextView) arg1).getText().toString();
+				// Toast.makeText(getApplicationContext(), pilihan
+				// +" "+arg2+" ", Toast.LENGTH_SHORT).show();
+				try {
+					Intent intent = null;
+					if (pilihan.equals("Tambah Data")) {
+						intent = new Intent(MainActivity.this,
+								InsertActivity.class);
+						// Toast.makeText(getApplicationContext(),
+						// intent.getDataString(), Toast.LENGTH_SHORT).show();
+					} else if (pilihan.equals("Tampilkan Data")) {
+						intent = new Intent(MainActivity.this,
+								JSONActivity.class);
+						// Toast.makeText(getApplicationContext(), pilihan
+						// +" "+arg2+" ", Toast.LENGTH_SHORT).show();
 
-	protected void tampilkanPilihan(String pilihan) {
-		try {
-			Intent i = null;
-			if (pilihan.equals("Tambah Data")) {
-				i = new Intent(this, InsertActivity.class);
-			} else if (pilihan.equals("Tampilkan Data")) {
-				i = new Intent(this, JSONActivity.class);
-			} else if (pilihan.equals("Exit")) {
-				finish();
-			} else {
-				Toast.makeText(this,"Anda Memilih: " + pilihan + " , " +
-						"Actionnya belum dibuat", Toast.LENGTH_LONG).show();
+					} else if (pilihan.equals("Exit")) {
+						finish();
+						// Toast.makeText(getApplicationContext(), pilihan
+						// +" "+arg2+" ", Toast.LENGTH_SHORT).show();
+					}
+					startActivity(intent);
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			startActivity(i);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		});
+
 	}
+
 }
